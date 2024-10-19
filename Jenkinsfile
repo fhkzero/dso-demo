@@ -38,6 +38,21 @@ pipeline {
             }
           }
         }
+        stage('OCI Image BnP') {  // Kaniko ile imaj oluşturma ve yayınlama aşaması
+          steps {
+            container('kaniko') {
+              sh '''
+                /kaniko/executor \
+                -f `pwd`/Dockerfile \
+                -c `pwd` \
+                --insecure \
+                --skip-tls-verify \
+                --cache=true \
+                --destination=docker.io/fhkzero/dso-demo
+              '''
+            }
+          }
+        }
       }
     }
 
