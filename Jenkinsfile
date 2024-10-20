@@ -18,21 +18,44 @@ pipeline {
         }
       }
     }
-    stage('SCA') {  // SCA aşaması bağımlılık denetimi için eklendi
-      steps {
-        container('maven') {
-          catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-            sh 'mvn org.owasp:dependency-check-maven:check'
+    stage('Static Analysis') {  // 'Test' aşaması Static Analysis olarak yeniden adlandırıldı
+      parallel {
+        stage('Unit Tests') {
+          steps {
+            container('maven') {
+              sh 'mvn test'
+            }
           }
         }
-      }
-      post {
-        always {
-          archiveArtifacts allowEmptyArchive: true, 
-                            artifacts: 'target/dependency-check-report.html', 
-                            fingerprint: true,
-                            onlyIfSuccessful: true
-          // dependencyCheckPublisher pattern: 'report.xml'
+        stage('SCA') {  // SCA aşaması eklendi
+          steps {
+            container('maven') {
+              catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                sh 'mvn org.owasp:dependency-check-maven:check'
+              }
+            }
+          }
+          post {
+            always {
+              archiveArtifacts allowEmptyArchive: true, 
+                                artifacts: 'target/dependency-check-report.html', 
+                                fingerprint: true,
+                                onlyIfSuccessful: true
+            }
+          }
+        }
+        stage('OSS License Checker') {  // OSS License Checker aşaması eklendi
+          steps {
+            container('licensefinder') {
+              sh 'ls -al'
+              sh '''#!/bin/bash --login
+              /bin/bash --login
+              rvm use default
+              gem install license_finder
+              license_finder
+              '''
+            }
+          }
         }
       }
     }
@@ -59,20 +82,6 @@ pipeline {
               '''
             }
           }
-        }
-      }
-    }
-    stage('OSS License Checker') {  // OSS License Checker aşaması eklendi
-      steps {
-        container('licensefinder') {
-          sh 'ls -al'
-          sh '''
-          #!/bin/bash --login
-          /bin/bash --login
-          rvm use default
-          gem install license_finder
-          license_finder
-          '''
         }
       }
     }
