@@ -18,7 +18,7 @@ pipeline {
         }
       }
     }
-    stage('SCA') {
+    stage('SCA') {  // SCA aşaması bağımlılık denetimi için eklendi
       steps {
         container('maven') {
           catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
@@ -62,7 +62,6 @@ pipeline {
         }
       }
     }
-
     stage('Deploy to Dev') {
       steps {
         // TODO
