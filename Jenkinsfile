@@ -15,14 +15,6 @@ pipeline {
     PATH = "${env.JAVA_HOME}/bin:${env.PATH}"  // PATH'e de JDK'yı ekleyin
   }
   stages {
-    stage('Check Maven Version') {
-      steps {
-        sh 'echo $JAVA_HOME'  // JAVA_HOME değerini kontrol et
-        sh 'java -version'    // Java sürümünü kontrol et
-        sh 'mvn -version'     // Maven sürümünü kontrol et
-      }
-    }
-
     stage('Build') {
       parallel {
         stage('Compile') {
