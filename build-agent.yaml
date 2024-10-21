@@ -20,13 +20,20 @@ spec:
           mountPath: /kaniko/.docker
 
     - name: maven
-      image: maven:3.9.9-eclipse-temurin-17-alpine  # Maven ve JDK 17 ile güncellenmiş konteyner
+      image: maven:3.9.9-eclipse-temurin-17-alpine  # Maven ve JDK içeren güncel imaj
       command:
         - cat
       tty: true
+      env:
+        - name: JAVA_HOME  # JAVA_HOME ortam değişkenini manuel olarak ayarlıyoruz
+          value: "/opt/java/openjdk"
+        - name: PATH  # PATH değişkenine JDK'yı ekliyoruz
+          value: "/opt/java/openjdk/bin:/usr/local/maven/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
       volumeMounts:
         - name: m2
           mountPath: /root/.m2/
+        - mountPath: /home/jenkins/agent
+          name: workspace-volume
 
     - name: docker-tools
       image: rmkanda/docker-tools:latest
