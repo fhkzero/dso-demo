@@ -7,11 +7,13 @@ pipeline {
     }
   }
   tools {
+    jdk 'JDK 17 OpenJDK'  // Global Tool Configuration'da tanımladığınız JDK ismi
     maven 'Maven 3.9.9'  // Global Tool Configuration'da tanımladığınız Maven ismi
   }
   stages {
     stage('Check Maven Version') {
       steps {
+        sh 'java -version'  // Java sürümünü kontrol et
         sh 'mvn -version'
       }
     }
