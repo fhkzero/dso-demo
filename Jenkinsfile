@@ -10,7 +10,20 @@ pipeline {
     jdk 'JDK 17 OpenJDK'  // Global Tool Configuration'da tanımladığınız JDK ismi
     maven 'Maven 3.9.9'   // Global Tool Configuration'da tanımladığınız Maven ismi
   }
+  environment {
+    JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"  // Doğru JDK yolunu tanımlayın
+    PATH = "${JAVA_HOME}/bin:${env.PATH}"
+  }
   stages {
+    stage('Check Maven and Java Version') {
+      steps {
+        container('maven') {
+          sh 'echo $JAVA_HOME'    // JAVA_HOME'un doğru ayarlanıp ayarlanmadığını kontrol edin
+          sh 'java -version'      // Java sürümünü kontrol edin
+          sh 'mvn -version'       // Maven sürümünü kontrol edin
+        }
+      }
+    }
     stage('Build') {
       parallel {
         stage('Compile') {
