@@ -6,6 +6,9 @@ pipeline {
       idleMinutes 1
     }
   }
+  tools {
+    maven 'Maven 3.9.9'  // Global Tool Configuration'da tanımladığınız Maven ismi
+  }
   stages {
     stage('Check Maven Version') {
       steps {
