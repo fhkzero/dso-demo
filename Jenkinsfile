@@ -15,15 +15,6 @@ pipeline {
     PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
   }
   stages {
-    stage('Check Maven and Java Version') {
-      steps {
-        container('maven') {
-          sh 'echo $JAVA_HOME'    // JAVA_HOME'un doğru ayarlanıp ayarlanmadığını kontrol edin
-          sh 'java -version'      // Java sürümünü kontrol edin
-          sh 'mvn -version'       // Maven sürümünü kontrol edin
-        }
-      }
-    }
     stage('Build') {
       parallel {
         stage('Compile') {
