@@ -12,6 +12,7 @@ pipeline {
   }
   environment {
     JAVA_HOME = "${tool 'JDK 17 OpenJDK'}"  // JAVA_HOME ortam değişkeni tanımlandı
+    PATH = "${env.JAVA_HOME}/bin:${env.PATH}"  // PATH'e de JDK'yı ekleyin
   }
   stages {
     stage('Check Maven Version') {
