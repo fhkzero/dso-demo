@@ -6,21 +6,7 @@ pipeline {
       idleMinutes 1
     }
   }
-  tools {
-    jdk 'JDK 17 OpenJDK'
-    maven 'Maven 3.9.9'
-  }
-  environment {
-    JAVA_HOME = "${tool 'JDK 17 OpenJDK'}"  // JAVA_HOME ortam değişkeni tanımlandı
-    PATH = "${env.JAVA_HOME}/bin:${env.PATH}"  // PATH'e de JDK'yı ekleyin
-  }
   stages {
-    stage('Check Maven Version') {
-      steps {
-        sh 'mvn -version'
-        sh 'java -version'
-      }
-    }
     stage('Build') {
       parallel {
         stage('Compile') {
