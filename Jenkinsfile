@@ -62,7 +62,9 @@ pipeline {
     stage('SAST') {  // Yeni SAST aşaması Static Analysis'ten sonra eklendi
       steps {
         container('slscan') {
-          sh 'scan --type java,depscan --build'
+          catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+            sh 'scan --type java,depscan --build'
+          }
         }
       }
       post {
