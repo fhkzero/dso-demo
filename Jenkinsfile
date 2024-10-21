@@ -6,15 +6,12 @@ pipeline {
       idleMinutes 1
     }
   }
-  tools {
-    jdk 'JDK 17 OpenJDK'  // Global Tool Configuration'da tanımladığınız JDK ismi
-    maven 'Maven 3.9.9'   // Global Tool Configuration'da tanımladığınız Maven ismi
-  }
-  environment {
-    JAVA_HOME = tool name: 'JDK 17 OpenJDK', type: 'hudson.model.JDK'
-    PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
-  }
   stages {
+    stage('Check Maven Version') {
+      steps {
+        sh 'mvn -version'
+      }
+    }
     stage('Build') {
       parallel {
         stage('Compile') {
