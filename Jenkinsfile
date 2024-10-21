@@ -6,6 +6,10 @@ pipeline {
       idleMinutes 1
     }
   }
+  tools {
+    jdk 'JDK 17 OpenJDK'
+    maven 'Maven 3.9.9'
+  }
   stages {
     stage('Check Maven Version') {
       steps {
