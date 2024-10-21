@@ -10,10 +10,6 @@ pipeline {
     jdk 'JDK 17 OpenJDK'  // Global Tool Configuration'da tanımladığınız JDK ismi
     maven 'Maven 3.9.9'   // Global Tool Configuration'da tanımladığınız Maven ismi
   }
-  environment {
-    JAVA_HOME = "${tool 'JDK 17 OpenJDK'}"  // JAVA_HOME ortam değişkeni tanımlandı
-    PATH = "${env.JAVA_HOME}/bin:${env.PATH}"  // PATH'e de JDK'yı ekleyin
-  }
   stages {
     stage('Build') {
       parallel {
