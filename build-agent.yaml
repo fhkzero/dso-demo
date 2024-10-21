@@ -18,23 +18,14 @@ spec:
       volumeMounts:
         - name: jenkins-docker-cfg
           mountPath: /kaniko/.docker
-
     - name: maven
-      image: maven:3.9.9-eclipse-temurin-17-alpine  # Maven ve JDK içeren güncel imaj
+      image: maven:alpine
       command:
         - cat
       tty: true
-      env:
-        - name: JAVA_HOME  # JAVA_HOME ortam değişkenini manuel olarak ayarlıyoruz
-          value: "/opt/java/openjdk"
-        - name: PATH  # PATH değişkenine JDK'yı ekliyoruz
-          value: "/opt/java/openjdk/bin:/usr/local/maven/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
       volumeMounts:
         - name: m2
           mountPath: /root/.m2/
-        - mountPath: /home/jenkins/agent
-          name: workspace-volume
-
     - name: docker-tools
       image: rmkanda/docker-tools:latest
       command:
@@ -45,26 +36,22 @@ spec:
           name: docker-sock
         - mountPath: /tmp/trivycache/
           name: trivycache
-
     - name: trufflehog
       image: rmkanda/trufflehog
       command:
         - cat
       tty: true
-
     - name: licensefinder
       image: licensefinder/license_finder
       command:
         - cat
       tty: true
-
-    - name: slscan
+    - name: slscan  # Yeni slscan konteyneri eklendi
       image: shiftleft/sast-scan:v2.1.2
       imagePullPolicy: Always
       command:
         - cat
       tty: true
-
   volumes:
     - name: jenkins-docker-cfg
       projected:
@@ -74,15 +61,12 @@ spec:
               items:
                 - key: .dockerconfigjson
                   path: config.json
-
     - name: m2
       hostPath:
         path: /tmp/.m2/
-
     - name: docker-sock
       hostPath:
         path: /var/run
-
     - name: trivycache
       hostPath:
         path: /tmp/trivycache/
