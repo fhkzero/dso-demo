@@ -8,13 +8,17 @@ pipeline {
   }
   tools {
     jdk 'JDK 17 OpenJDK'  // Global Tool Configuration'da tanımladığınız JDK ismi
-    maven 'Maven 3.9.9'  // Global Tool Configuration'da tanımladığınız Maven ismi
+    maven 'Maven 3.9.9'   // Global Tool Configuration'da tanımladığınız Maven ismi
+  }
+  environment {
+    JAVA_HOME = "${tool 'JDK 17 OpenJDK'}"  // JAVA_HOME ortam değişkeni tanımlandı
   }
   stages {
     stage('Check Maven Version') {
       steps {
-        sh 'java -version'  // Java sürümünü kontrol et
-        sh 'mvn -version'
+        sh 'echo $JAVA_HOME'  // JAVA_HOME değerini kontrol et
+        sh 'java -version'    // Java sürümünü kontrol et
+        sh 'mvn -version'     // Maven sürümünü kontrol et
       }
     }
 
